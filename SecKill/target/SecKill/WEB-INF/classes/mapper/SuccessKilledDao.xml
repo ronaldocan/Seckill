@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.seckill.dao.SuccessKilledDao" >
+    <sql id="Base_Column_List">
+      seckill_id,user_phone,state,create_time
+    </sql>
+    <insert id="insertSuccessKilled" parameterType="map">
+        INSERT ignore INTO success_seckilled
+        (seckill_id,user_phone,create_time)
+        VALUES
+        (#{seckillId},#{phone},now())
+    </insert>
+    <select id="queryByIdWithSeckilled" resultType="org.seckill.entity.SuccessKilled" parameterType="long">
+        SELECT
+            sk.seckill_id,
+            sk.user_phone,
+            sk.create_time,
+            sk.state,
+            s.seckill_id "seckill.seckill_id",
+            s.name "seckill.name",
+            s.number "seckill.number",
+            s.start_time "seckill.start_time",
+            s.end_time "seckill.end_time",
+            s.create_time "seckill.create_time"
+        FROM success_killed sk
+        INNER JOIN seckill s ON sk.seckill_id=s.seckill_id
+        WHERE sk.seckill_id=#{seckillId} and sk.user_phone=#{userPhone}
+    </select>
+</mapper>
